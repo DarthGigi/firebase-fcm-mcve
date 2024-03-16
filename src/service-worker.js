@@ -26,11 +26,11 @@ const messaging = getMessaging(firebase);
 onBackgroundMessage(messaging, async (/** @type {import("firebase/messaging").MessagePayload} */ payload) => {
   console.log("onBackgroundMessage: ", payload);
   const notification = /** @type {import("firebase/messaging").NotificationPayload} */ (payload.notification);
-  const notificationTitle = notification?.title;
+  const notificationTitle = notification?.title ?? "New message from Firebase!";
   const notificationOptions = /** @type {NotificationOptions} */ ({
-    body: notification?.body,
-    icon: notification?.icon,
-    image: notification?.image
+    body: notification?.body ?? "This is a Firebase Cloud Messaging background message!",
+    icon: notification?.icon ?? "https://firebase-fcm-mcve.vercel.app/favicon.ico",
+    image: notification?.image ?? "https://firebase-fcm-mcve.vercel.app/favicon.ico"
   });
 
   sw.registration.showNotification(notificationTitle, notificationOptions);
