@@ -19,7 +19,7 @@
     const permission = await requestNotificationPermission();
     if (permission === "granted") {
       const messaging = getMessaging(firebaseApp);
-      token = await getToken(messaging, {
+      getToken(messaging, {
         vapidKey: PUBLIC_VAPID_KEY,
         serviceWorkerRegistration: await serviceWorker
       });
@@ -31,6 +31,3 @@
 </script>
 
 <slot />
-
-<p>Firebase Token:</p>
-<p>{token ? token : ""}</p>

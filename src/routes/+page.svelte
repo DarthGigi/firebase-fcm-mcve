@@ -1,19 +1,33 @@
 <script lang="ts">
   import { requestNotificationPermission } from "$lib/utilities";
   import { onMount } from "svelte";
-
-  const handleNotificationPermission = async () => {
-    await requestNotificationPermission(true);
-    window.location.reload();
-  };
-
-  let notificationPermission: NotificationPermission;
+  import { getMessaging, getToken } from "firebase/messaging";
 
   onMount(async () => {
-    notificationPermission = await requestNotificationPermission();
+    handleRequestPermission();
   });
+
+  let permission: NotificationPermission;
+  let fcmToken: string;
+  const handleRequestPermission = async (request: boolean = false) => {
+    permission = await requestNotificationPermission(request);
+    if (permission === "granted") {
+      const messaging = getMessaging();
+      fcmToken = await getToken(messaging, {
+        serviceWorkerRegistration: await navigator.serviceWorker.ready
+      });
+    } else if (permission === "denied" || permission === "default") {
+      console.log("Permission denied or default");
+      fcmToken = "Permission denied or default";
+    }
+  };
 </script>
 
-<button on:click={handleNotificationPermission}>Request Notification Permission</button>
+<button on:click={() => handleRequestPermission(true)}>Request Notification Permission</button>
 
-<p>Notification permission: {notificationPermission}</p>
+<p>Notification permission: {permission}</p>
+
+<p>Firebase Token:</p>
+<p>{fcmToken}</p>
+
+<button on:click={() => window.location.reload()}>Reload Page</button>
