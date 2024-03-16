@@ -1,12 +1,12 @@
 <script lang="ts">
   import { requestNotificationPermission } from "$lib/utilities";
-  import { onMount } from "svelte";
-  let notificationPermission: NotificationPermission;
-  onMount(async () => {
-    notificationPermission = Notification.permission;
-  });
+
+  const handleNotificationPermission = async () => {
+    await requestNotificationPermission(true);
+    window.location.reload();
+  };
 </script>
 
-<button on:click={() => requestNotificationPermission()}>Request Notification Permission</button>
+<button on:click={handleNotificationPermission}>Request Notification Permission</button>
 
-<p>Notification permission: {notificationPermission ? notificationPermission : ""}</p>
+<p>Notification permission: {requestNotificationPermission()}</p>
