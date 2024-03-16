@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json.schemastore.org/web-manifest",
+  "name": "Firebase Cloud Messaging MCVE",
+  "short_name": "FCM MCVE",
+  "theme_color": "#000",
+  "background_color": "#000",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "id": "com.example.fcm.mcve"
+}
