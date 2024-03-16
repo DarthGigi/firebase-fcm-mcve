@@ -17,7 +17,8 @@ const firebase =
         projectId: "fir-fcm-mcve",
         storageBucket: "fir-fcm-mcve.appspot.com",
         messagingSenderId: "312974715018",
-        appId: "1:312974715018:web:13d2def22bb6c43e56a573"
+        appId: "1:312974715018:web:13d2def22bb6c43e56a573",
+        measurementId: "G-96Z7BN7ME5"
       })
     : getApp();
 
