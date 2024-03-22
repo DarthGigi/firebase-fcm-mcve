@@ -13,9 +13,21 @@
     permission = await requestNotificationPermission(request);
     if (permission === "granted") {
       const messaging = getMessaging();
-      fcmToken = await getToken(messaging, {
+
+      getToken(messaging, {
         serviceWorkerRegistration: await navigator.serviceWorker.ready
-      });
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            fcmToken = currentToken;
+          } else {
+            fcmToken = "No registration token available. Request permission to generate one.";
+          }
+        })
+        .catch((error) => {
+          console.error("getToken page error: ", error);
+          fcmToken = `getToken page error: ${error}`;
+        });
     } else if (permission === "denied" || permission === "default") {
       console.log("Permission denied or default");
       fcmToken = "Permission denied or default";

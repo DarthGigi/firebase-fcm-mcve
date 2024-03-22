@@ -22,7 +22,19 @@
       getToken(messaging, {
         vapidKey: PUBLIC_VAPID_KEY,
         serviceWorkerRegistration: await serviceWorker
-      });
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            token = currentToken;
+            console.log("currentToken: ", currentToken);
+          } else {
+            console.log("No registration token available. Request permission to generate one.");
+          }
+        })
+        .catch((error) => {
+          console.error("getToken layout error: ", error);
+        });
+
       onMessage(messaging, (payload) => {
         console.log("onMessage: ", payload);
       });
