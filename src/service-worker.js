@@ -4,8 +4,6 @@
 /// <reference lib="webworker" />
 
 const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
-// importScripts("https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js");
-// importScripts("https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging-compat.js");
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
 
