@@ -2,6 +2,7 @@
   import { dev } from "$app/environment";
   import { PUBLIC_VAPID_KEY } from "$env/static/public";
   import { firebaseConfig } from "$lib/firebase";
+  import { internalStorage } from "$lib/stores/preferences";
   import { requestNotificationPermission } from "$lib/utilities";
   import type { FirebaseApp } from "firebase/app";
   import { initializeApp } from "firebase/app";
@@ -11,29 +12,21 @@
   // Initialize Firebase
   const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
 
-  let token: string;
   onMount(async () => {
-    const serviceWorker = navigator.serviceWorker.register("/service-worker.js", {
+    const serviceWorker = await navigator.serviceWorker.register("/service-worker.js", {
       type: dev ? "module" : "classic"
     });
     const permission = await requestNotificationPermission();
     if (permission === "granted") {
       const messaging = getMessaging(firebaseApp);
-      getToken(messaging, {
+      const token = await getToken(messaging, {
         vapidKey: PUBLIC_VAPID_KEY,
-        serviceWorkerRegistration: await serviceWorker
-      })
-        .then((currentToken) => {
-          if (currentToken) {
-            token = currentToken;
-            console.log("currentToken: ", currentToken);
-          } else {
-            console.log("No registration token available. Request permission to generate one.");
-          }
-        })
-        .catch((error) => {
-          console.error("getToken layout error: ", error);
-        });
+        serviceWorkerRegistration: serviceWorker
+      });
+      internalStorage.update((state) => ({
+        ...state,
+        fcmToken: token
+      }));
 
       onMessage(messaging, (payload) => {
         console.log("onMessage: ", payload);
