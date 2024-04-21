@@ -9,13 +9,13 @@
   import { getMessaging, getToken, onMessage } from "firebase/messaging";
   import { onMount } from "svelte";
 
-  // Initialize Firebase
-  const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
-
   onMount(async () => {
     const serviceWorker = await navigator.serviceWorker.register("/service-worker.js", {
       type: dev ? "module" : "classic"
     });
+    // Initialize Firebase
+    const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
+
     const permission = await requestNotificationPermission();
     if (permission === "granted") {
       const messaging = getMessaging(firebaseApp);
